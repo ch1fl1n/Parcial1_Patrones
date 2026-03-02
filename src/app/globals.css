@@ -1,0 +1,306 @@
+/* Import Nunito Sans for brand typography */
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;600;700;800&display=swap');
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Force light color scheme */
+html {
+  color-scheme: light;
+}
+
+/* === Design Tokens (CSS Custom Properties) === */
+:root {
+  /* Colores institucionales */
+  --color-rojo-oficial: #c8102e;
+  --color-blanco: #ffffff;
+  --color-gris-institucional: #6e6e6e;
+  --color-rojo-brillante-alterno: #ff4136;
+  --color-amarillo-bandera: #ffd700;
+  --color-azul-bandera: #007bff;
+
+  /* Paleta modo claro (por defecto) */
+  --color-light-background: #ffffff;
+  --color-light-surface: #f8f8f8;
+  --color-light-text-primary: #333333;
+  --color-light-text-secondary: #6e6e6e;
+  --color-light-primary: #c8102e;
+  --color-light-primary-hover: #ff4136;
+  --color-light-secondary: #007bff;
+  --color-light-secondary-hover: #005bb5;
+  --color-light-border: #dadada;
+  --color-light-alert: #ffd700;
+  --color-light-info: #007bff;
+  --color-light-error: #c8102e;
+  --color-light-success: #2e7d32; /* verde accesible */
+  
+  /* On-color tokens (text color on colored backgrounds) */
+  --color-light-on-primary: #ffffff;
+  --color-light-on-secondary: #ffffff;
+  --color-light-on-success: #ffffff;
+  --color-light-on-alert: #333333;
+  --color-light-on-error: #ffffff;
+
+  /* Tokens semánticos (apuntan a claro por defecto) */
+  --color-background: var(--color-light-background);
+  --color-surface: var(--color-light-surface);
+  --color-text-primary: var(--color-light-text-primary);
+  --color-text-secondary: var(--color-light-text-secondary);
+  --color-primary: var(--color-light-primary);
+  --color-primary-hover: var(--color-light-primary-hover);
+  --color-secondary: var(--color-light-secondary);
+  --color-secondary-hover: var(--color-light-secondary-hover);
+  --color-border: var(--color-light-border);
+  --color-alert: var(--color-light-alert);
+  --color-info: var(--color-light-info);
+  --color-error: var(--color-light-error);
+  --color-success: var(--color-light-success);
+
+  /* On-color semantic tokens */
+  --color-on-primary: var(--color-light-on-primary);
+  --color-on-secondary: var(--color-light-on-secondary);
+  --color-on-success: var(--color-light-on-success);
+  --color-on-alert: var(--color-light-on-alert);
+  --color-on-error: var(--color-light-on-error);
+
+  /* Accent gradient stops (can be themed) */
+  --gradient-accent-start: var(--color-secondary);
+  --gradient-accent-end: var(--color-primary);
+  /* Muted accent overlay for subtle colored surfaces (use sparingly) */
+  --color-accent-muted: rgba(200,16,46,0.06);
+  --color-accent-soft: rgba(0,123,255,0.06);
+
+  /* Tipografía */
+  /* Prefer Nunito Sans for brand, fall back to system stack */
+  --font-primary: 'Nunito Sans', system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-mono: var(
+    --font-geist-mono,
+    ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Monaco,
+    Consolas,
+    "Liberation Mono",
+    "Courier New",
+    monospace
+  );
+
+    /* Alias para compatibilidad: algunos componentes usan --font-family */
+    --font-family: var(--font-primary);
+
+  --h1-size: 3rem; /* 48px */
+  --h1-weight: 700;
+  --h1-line: 1.2;
+  --h2-size: 2.25rem; /* 36px */
+  --h2-weight: 600;
+  --h2-line: 1.3;
+  --h3-size: 1.75rem; /* 28px */
+  --h3-weight: 600;
+  --h3-line: 1.3;
+  --h4-size: 1.375rem; /* 22px */
+  --h4-weight: 600;
+  --h4-line: 1.4;
+  --h5-size: 1.125rem; /* 18px */
+  --h5-weight: 600;
+  --h5-line: 1.4;
+  --h6-size: 1rem; /* 16px */
+  --h6-weight: 600;
+  --h6-line: 1.5;
+  --body1-size: 1rem; /* 16px */
+  --body1-weight: 400;
+  --body1-line: 1.6;
+  --body2-size: 0.875rem; /* 14px */
+  --body2-weight: 400;
+  --body2-line: 1.6;
+  --caption-size: 0.75rem; /* 12px */
+  --caption-weight: 400;
+  --caption-line: 1.4;
+  --button-text-size: 1rem; /* 16px */
+  --button-text-weight: 600;
+  --button-text-line: 1.2;
+}
+
+/* Dark mode disabled - Light theme is always active */
+/* To enable dark mode in the future, uncomment the media query below */
+
+/*
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-background: var(--color-dark-background);
+    --color-surface: var(--color-dark-surface);
+    --color-text-primary: var(--color-dark-text-primary);
+    --color-text-secondary: var(--color-dark-text-secondary);
+    --color-primary: var(--color-dark-primary);
+    --color-primary-hover: var(--color-dark-primary-hover);
+    --color-secondary: var(--color-dark-secondary);
+    --color-secondary-hover: var(--color-dark-secondary-hover);
+    --color-border: var(--color-dark-border);
+    --color-alert: var(--color-dark-alert);
+    --color-info: var(--color-dark-info);
+    --color-error: var(--color-dark-error);
+    --color-success: var(--color-dark-success);
+  }
+}
+*/
+
+/* Alinear variables existentes a los tokens semánticos */
+:root {
+  --background: var(--color-background);
+  --foreground: var(--color-text-primary);
+}
+
+/* === Utilidades de tipografía === */
+.text-h1 {
+  font: var(--h1-weight) var(--h1-size) / var(--h1-line) var(--font-primary);
+  color: var(--color-text-primary);
+}
+.text-h2 {
+  font: var(--h2-weight) var(--h2-size) / var(--h2-line) var(--font-primary);
+  color: var(--color-text-primary);
+}
+.text-h3 {
+  font: var(--h3-weight) var(--h3-size) / var(--h3-line) var(--font-primary);
+  color: var(--color-text-primary);
+}
+.text-h4 {
+  font: var(--h4-weight) var(--h4-size) / var(--h4-line) var(--font-primary);
+  color: var(--color-text-primary);
+}
+.text-h5 {
+  font: var(--h5-weight) var(--h5-size) / var(--h5-line) var(--font-primary);
+  color: var(--color-text-primary);
+}
+.text-h6 {
+  font: var(--h6-weight) var(--h6-size) / var(--h6-line) var(--font-primary);
+  color: var(--color-text-primary);
+}
+.text-body1 {
+  font: var(--body1-weight) var(--body1-size) / var(--body1-line) var(--font-primary);
+  color: var(--color-text-primary);
+}
+.text-body2 {
+  font: var(--body2-weight) var(--body2-size) / var(--body2-line) var(--font-primary);
+  color: var(--color-text-secondary);
+}
+.text-caption {
+  font: var(--caption-weight) var(--caption-size) / var(--caption-line) var(--font-primary);
+  color: var(--color-text-secondary);
+}
+.text-button {
+  font: var(--button-text-weight) var(--button-text-size) / var(--button-text-line)
+    var(--font-primary);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+/* Asegurar que el body use la fuente primaria */
+body {
+    /* Usar lista explícita aquí para evitar advertencias estáticas, la variable --font-family sigue disponible para componentes */
+    font-family: 'Nunito Sans', system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+/* === Small, tasteful UI utilities === */
+
+/* Buttons - base and primary */
+button,
+.btn {
+  font: var(--button-text-weight) var(--button-text-size) / var(--button-text-line) var(
+    --font-primary
+  );
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--gradient-accent-start), var(--gradient-accent-end));
+  color: var(--color-on-primary);
+  border: none;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+}
+
+.btn-ghost {
+  background: transparent;
+  border: 1px dashed var(--color-border);
+}
+
+/* Card utility - consistent surfaces */
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04);
+}
+
+/* Links - slightly more color on hover */
+a:hover {
+  color: var(--color-primary-hover);
+}
+
+/* Subtle colored bands for sections (use sparingly) */
+.band {
+  border-radius: 8px;
+  padding: 10px 12px;
+  background: linear-gradient(90deg, var(--color-accent-muted), rgba(255,255,255,0));
+  border: 1px solid rgba(0,0,0,0.02);
+}
+
+/* Small helper for colored badges */
+.badge {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-weight: 700;
+  font-size: 0.875rem;
+}
+
+/* NavBar utilities */
+.navBar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.navItemActive {
+  box-shadow: 0 8px 24px rgba(200,16,46,0.12);
+  transform: translateY(-1px);
+}
+
+/* Small circular alert indicator for nav items */
+.navAlertDot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-alert);
+  margin-left: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+}

@@ -1,0 +1,126 @@
+.map {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+    background: var(--color-background);
+  border-radius: 8px;
+    color: var(--color-text-secondary);
+}
+
+.popup {
+    font-family: 'Nunito Sans', system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  max-width: 280px;
+}
+
+.popup h3 {
+  margin: 0 0 8px 0;
+  color: var(--color-rojo-oficial);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.popup p {
+  margin: 4px 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.popup hr {
+  margin: 8px 0;
+  border: none;
+  border-top: 1px solid #e0e0e0;
+}
+
+.popup small {
+  font-size: 12px;
+    color: var(--color-text-secondary);
+}
+
+.markerIcon {
+  background: none;
+  border: none;
+}
+
+.threatMarker {
+  font-size: 24px;
+  text-align: center;
+  cursor: pointer;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+  transition: transform 0.2s;
+}
+
+.threatMarker:hover {
+  transform: scale(1.2);
+}
+
+.threatMarker[data-severity="critical"] {
+  animation: pulse 2s infinite;
+}
+
+.capacityMarker {
+  font-size: 24px;
+  text-align: center;
+  cursor: pointer;
+  background: white;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s;
+}
+
+.capacityMarker:hover {
+  transform: scale(1.15);
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+/* Estilos para controles de Leaflet */
+:global(.leaflet-control-zoom a) {
+  color: var(--color-rojo-oficial) !important;
+}
+
+:global(.leaflet-popup-content-wrapper) {
+  border-radius: 8px;
+}
+
+:global(.leaflet-popup-tip) {
+  background: white;
+}
+
+/* Botón de análisis IA en popups */
+:global(.ai-analyze-btn) {
+  display: inline-block;
+  width: 100%;
+  margin-top: 12px;
+  padding: 10px 16px;
+  background: linear-gradient(135deg, var(--color-rojo-oficial), #a00d28);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+:global(.ai-analyze-btn:hover) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(200, 16, 46, 0.3);
+}

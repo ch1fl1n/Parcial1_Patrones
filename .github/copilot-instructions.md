@@ -1,0 +1,19 @@
+RETO:CRUZ ROJA – ANÁLISIS Y VISUALIZACIÓN GEOESPACIAL PARA LA RESILIENCIA CLIMÁTICAURBANA EN SOACHA
+===================================================================================================
+
+Contexto:El municipio de Soacha enfrenta desafíos significativos asociados al cambioclimático y a la urbanización acelerada. Las comunidades de El Danubio y LaMaría, en particular, son altamente vulnerables a inundaciones y altastemperaturas, agravadas por la deficiencia de infraestructura y la falta deacceso a información actualizada sobre el riesgo. La Cruz Roja Colombiana,junto con la Z Zurich Foundation lidera el proyecto de Resiliencia ClimáticaUrbana (RCU) y en articulación con la Universidad de La Sabana, se llevará acabo su ejecución con el propósito de fortalecer la capacidad de lascomunidades para anticipar, responder y recuperarse ante eventos climáticosextremos.Durante el proyecto, se han recolectado datos valiosos a través de metodologíascomo el Análisis de Vulnerabilidades y Capacidades Ampliado (AVCA) y laMedición de Resiliencia Climática Comunitaria (CRMC). Sin embargo, estos datosse encuentran dispersos y no permiten una visualización clara del impacto o unaplanificación preventiva efectiva. Este reto busca transformar dichos datos enuna herramienta interactiva y analítica basada en mapas de acceso libre ytecnologías geoespaciales.
+
+Definicióndel reto:
+-------------------
+
+El desafío consiste en desarrollar un prototipo funcional (web,dashboard o aplicación) que integre datos georreferenciados y visualizacionesinteractivas para analizar, monitorear y comunicar información sobre laresiliencia climática urbana en Soacha. La solución debe permitir identificarlas zonas de mayor vulnerabilidad, estimar la cantidad de personas vinculadasal proyecto (por intervenciones en cohesión social, Gestión del Riesgo, cambioclimático), afectadas por una emergencia y generar alertas preventivas basadasen datos técnicos oficiales, ambientales o históricos.Líneas de desarrollo posibles:1. Mapa interactivo con capas georreferenciadas que muestre zonas de riesgo,puntos críticos y rutas seguras.2. Dashboard de impacto poblacional: herramienta que calcule cuántas personas ofamilias fueron vinculadas y afectadas por cada evento y en qué sectores.3. Sistema de predicción o alerta preventiva mediante IA o análisis estadísticode datos climáticos (precipitación, temperatura, humedad).4. Plataforma de reporte ciudadano o panel de control que permita visualizaractualizaciones de campo, fotografías o registros.
+
+Condicionesque debe cumplir la solución:
+----------------------------------------
+
+1\. Georreferenciación:   - Integrar mapas de acceso libre(OpenStreetMap, Leaflet, Google Maps, Mapbox, etc.) para representarinformación territorial.2. Datos abiertos:   - Usar datos disponibles del proyecto RCU(AVCA y CRMC) o fuentes públicas (IDEAM, OpenWeather, datos demográficos).3. Visualización e impacto:   - Permitir filtrar, visualizar ycomparar información por zonas, periodos o tipo de evento.4. Inteligencia Artificial o analítica predictiva:   - Aplicar algoritmos simples paragenerar alertas tempranas o detectar patrones de riesgo.5. Usabilidad:   - Interfaz intuitiva para voluntarios,líderes comunitarios o instituciones sin conocimientos técnicos.6. Escalabilidad:   - Capacidad de extender el sistema aotras comunidades o municipios.
+
+Entregableesperado:
+-------------------
+
+\- Prototipo funcional o demo navegable (mapa interactivo, dashboard, appo sistema web).- Pitch de 5.- Descripción técnica del modelo de datos, herramientas utilizadas y posiblesintegraciones con sistemas institucionales.

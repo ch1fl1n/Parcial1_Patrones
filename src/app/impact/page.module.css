@@ -1,0 +1,270 @@
+/* Impact Dashboard specific styles */
+
+.container {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 24px;
+  padding: 24px;
+}
+
+.sidebar {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 16px;
+  height: fit-content;
+}
+
+.mapThumb {
+  width: 100%;
+  height: 160px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+}
+
+.mapThumb iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.riskList {
+  margin-top: 12px;
+  display: grid;
+  gap: 8px;
+}
+
+.riskItem {
+  color: var(--color-text-secondary);
+}
+
+.main {
+  display: grid;
+  gap: 20px;
+}
+
+.titleWrap {
+  display: grid;
+  gap: 6px;
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.subtitle {
+  color: var(--color-text-secondary);
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.statCard {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.statLabel {
+  color: var(--color-text-secondary);
+}
+
+.statValue {
+  font: 700 1.5rem/1.2 var(--font-primary);
+  margin-top: 8px;
+}
+
+.sectionCard {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+}
+
+.sectionHeader {
+  padding: 16px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.sectionBody {
+  padding: 8px 16px 16px 16px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 12px 8px;
+  border-bottom: 1px solid var(--color-border);
+  text-align: left;
+}
+
+.table th {
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}
+
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+.compareWrap {
+  display: grid;
+  gap: 12px;
+}
+
+.chipInput {
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 8px 10px;
+}
+
+.kpiCard {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 16px;
+  align-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.kpiValue {
+  font: 700 2rem/1 var(--font-primary);
+}
+
+.trend {
+  color: var(--color-text-secondary);
+  margin-left: 8px;
+}
+
+.sparkline {
+  height: 60px;
+  display: grid;
+  grid-auto-flow: column;
+  align-items: end;
+  gap: 8px;
+}
+
+.bar {
+  background: var(--color-secondary);
+  width: 10px;
+  border-radius: 2px 2px 0 0;
+}
+
+.bar.dim {
+  background: color-mix(in srgb, var(--color-secondary) 50%, transparent);
+}
+
+.footerTicks {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  color: var(--color-text-secondary);
+  font-size: 12px;
+}
+
+/* Nuevos estilos para impacto dinámico */
+.impactAlert {
+  background: linear-gradient(135deg, rgba(200, 16, 46, 0.1), rgba(200, 16, 46, 0.05));
+  border: 2px solid var(--color-rojo-oficial);
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.impactAlert h3 {
+  color: var(--color-rojo-oficial);
+  margin-bottom: 16px;
+}
+
+.impactGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.impactStat {
+  background: white;
+  padding: 16px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.impactStat strong {
+  display: block;
+  font-size: 28px;
+  color: var(--color-rojo-oficial);
+  margin-bottom: 6px;
+}
+
+.impactStat span {
+  font-size: 13px;
+  color: var(--color-text-secondary);
+}
+
+.vulnerability {
+  padding: 12px;
+  background: white;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 16px;
+}
+
+.vulnerability strong {
+  color: var(--color-rojo-oficial);
+}
+
+.vulnGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.vulnCard {
+  padding: 20px;
+  background: var(--color-background);
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  text-align: center;
+}
+
+.vulnPercent {
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--color-rojo-oficial);
+  margin-bottom: 8px;
+}
+
+.vulnCard p {
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--color-text-secondary);
+}
+
+@media (max-width: 900px) {
+  .container {
+    grid-template-columns: 1fr;
+  }
+
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .impactGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .vulnGrid {
+    grid-template-columns: 1fr;
+  }
+}
