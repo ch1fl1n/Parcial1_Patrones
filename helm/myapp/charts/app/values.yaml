@@ -1,14 +1,27 @@
 # Default values for app.
+replicaCount: 1
+
 image:
+  registry: docker.io
   repository: parcial
   tag: "latest"
   pullPolicy: IfNotPresent
 
-replicaCount: 1
-
 service:
   type: ClusterIP
   port: 80
+
+ingress:
+  enabled: true
+  className: ""
+  hosts:
+    - host: myapp.local
+      paths:
+        - path: /
+          pathType: Prefix
+        - path: /api
+          pathType: Prefix
+  tls: []
 
 config:
   dbHost: "parcial-postgresql"
@@ -18,3 +31,11 @@ config:
 
 secret:
   dbPassword: "mypass"
+
+resources:
+  limits:
+    cpu: 200m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi

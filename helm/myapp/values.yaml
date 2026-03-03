@@ -1,9 +1,15 @@
+# Default values for myapp.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
 # PostgreSQL subchart values
 postgresql:
   enabled: true
+  image:
+    registry: docker.io
+    repository: bitnami/postgresql
+    tag: "15.5.0"  # Recommended stable tag for PostgreSQL 15
+    pullPolicy: IfNotPresent
   auth:
     postgresPassword: "changeme"  # Change this in production
     username: "myuser"
@@ -11,17 +17,35 @@ postgresql:
     database: "parcialdb"
   primary:
     persistence:
-      enabled: false  # Disable persistence for Minikube demo
+      enabled: true  # Enable for data persistence
+      size: 1Gi  # Small size for Minikube demo
+    resources:
+      requests:
+        cpu: 250m
+        memory: 256Mi
 
 # App subchart values
 app:
+  replicaCount: 1  # ReplicaSet count
   image:
+    registry: docker.io
     repository: parcial
-    tag: "latest"
+    tag: "latest"  # Use specific tag in production, e.g., "v1.0.0"
     pullPolicy: IfNotPresent
   service:
     type: ClusterIP
     port: 80
+  ingress:
+    enabled: true
+    className: ""
+    hosts:
+      - host: myapp.local
+        paths:
+          - path: /
+            pathType: Prefix
+          - path: /api
+            pathType: Prefix
+    tls: []
   config:
     dbHost: "parcial-postgresql"
     dbPort: "5432"
@@ -29,3 +53,7 @@ app:
     dbUser: "myuser"
   secret:
     dbPassword: "mypass"  # Should match postgresql.auth.password
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
