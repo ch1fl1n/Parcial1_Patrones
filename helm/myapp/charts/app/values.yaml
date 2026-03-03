@@ -1,0 +1,20 @@
+# Default values for app.
+image:
+  repository: parcial
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+replicaCount: 1
+
+service:
+  type: ClusterIP
+  port: 80
+
+config:
+  dbHost: "parcial-postgresql"
+  dbPort: "5432"
+  dbName: "parcialdb"
+  dbUser: "myuser"
+
+secret:
+  dbPassword: "mypass"

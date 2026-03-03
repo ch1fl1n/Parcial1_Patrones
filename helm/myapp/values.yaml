@@ -1,0 +1,31 @@
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# PostgreSQL subchart values
+postgresql:
+  enabled: true
+  auth:
+    postgresPassword: "changeme"  # Change this in production
+    username: "myuser"
+    password: "mypass"  # Change this in production
+    database: "parcialdb"
+  primary:
+    persistence:
+      enabled: false  # Disable persistence for Minikube demo
+
+# App subchart values
+app:
+  image:
+    repository: parcial
+    tag: "latest"
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 80
+  config:
+    dbHost: "parcial-postgresql"
+    dbPort: "5432"
+    dbName: "parcialdb"
+    dbUser: "myuser"
+  secret:
+    dbPassword: "mypass"  # Should match postgresql.auth.password
