@@ -1,9 +1,9 @@
 dependencies:
 - name: postgresql
   repository: https://charts.bitnami.com/bitnami
-  version: 15.5.0
+  version: 18.5.1
 - name: app
   repository: file://./charts/app
   version: 0.1.0
-digest: sha256:97485430650bad371d188667452ade6fa9edb2c5569805e91f986e81f6e60b2e
-generated: "2026-03-02T19:05:11.7901276-05:00"
+digest: sha256:44033d5a1cb3a5cda3ae0589422e320623f5d82e105beba92020a63553b3a048
+generated: "2026-03-03T22:14:25.675424-05:00"
