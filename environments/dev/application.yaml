@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
 
-  # --- Origen (cambia repoURL y targetRevision si hace falta) ---
+  # --- Origen
   source:
     repoURL: https://github.com/ch1fl1n/Parcial1_Patrones.git  
     targetRevision: main                                
