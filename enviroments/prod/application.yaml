@@ -1,0 +1,24 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: myapp-prod
+  namespace: argocd
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/ch1fl1n/Parcial1_Patrones.git
+    targetRevision: main
+    path: helm/myapp                                    # <- ajusta si tu chart está en otra ruta
+    helm:
+      valueFiles:
+        - values-prod.yaml
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: myapp-prod
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

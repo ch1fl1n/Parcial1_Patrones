@@ -1,0 +1,22 @@
+# values-prod.yaml - valores para entorno prod
+replicaCount: 3
+
+image:
+  repository: ch1fl1n/myapp   # <- cambia por tu repo de imagen
+  tag: prod
+
+service:
+  type: ClusterIP
+  port: 80
+
+resources:
+  requests:
+    cpu: "250m"
+    memory: "256Mi"
+  limits:
+    cpu: "500m"
+    memory: "512Mi"
+
+env:
+  - name: ENVIRONMENT
+    value: "prod"

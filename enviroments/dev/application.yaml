@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: myapp-dev
+  namespace: argocd
+spec:
+  project: default
+
+  # --- Origen (cambia repoURL y targetRevision si hace falta) ---
+  source:
+    repoURL: https://github.com/ch1fl1n/Parcial1_Patrones.git  
+    targetRevision: main                                
+    path: helm/myapp                                    # <- ajusta si tu chart está en otra ruta
+    helm:
+      # valueFiles relativos a `path`. Si pones path=helm/myapp y values-dev.yaml está ahí, deja esto así.
+      valueFiles:
+        - values-dev.yaml
+
+  # --- Destino en el clúster ---
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: myapp-dev   # Namespace donde se desplegará (cámbialo si quieres otro)
+
+  # --- Sincronización automática (cumple tu requisito) ---
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
+    # opcional: hooks o retry pueden añadirse si los necesitas

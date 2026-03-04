@@ -1,0 +1,23 @@
+# values-dev.yaml - valores para entorno dev
+replicaCount: 1
+
+image:
+  repository: ch1fl1n/myapp   # <- cambia por tu repo de imagen
+  tag: dev
+
+service:
+  type: ClusterIP
+  port: 80
+
+# ejemplo de configuración extra que podrías tener
+resources:
+  requests:
+    cpu: "100m"
+    memory: "128Mi"
+  limits:
+    cpu: "250m"
+    memory: "256Mi"
+
+env: 
+  - name: ENVIRONMENT
+    value: "dev"
