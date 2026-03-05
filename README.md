@@ -1,186 +1,90 @@
-# 🌱 Renace Soacha
+# Parcial - Renace Soacha :p
 
-## Plataforma Inteligente de Resiliencia Climática
+## Visión general
 
-**Transformando datos en resiliencia, tecnología en esperanza.**
+Renace Soacha es la plataforma que combina mapas interactivos, dashboards de impacto y un backend sólido para que la Cruz Roja y aliados puedan anticipar eventos climáticos extremos, monitorear poblaciones vulnerables (El Danubio, La María) y validar intervenciones de resiliencia urbana. El frontend Next.js consume APIs propias y servicios de IA (Ollama, etc.), mientras que el backend se conecta a un PostgreSQL gestionado por Helm para mantener los datos persistentes.
 
----
+## Arquitectura y componentes clave
 
-## 🎯 Contexto Estratégico
+- **Helm `myapp` chart**: empaqueta el dashboard Next.js junto a su dependencia PostgreSQL (Bitnami). Separar cada subchart permite controlar imágenes, recursos y secretos por entorno. El HPA adjunto escala sobre CPU si la demanda crece.
+- **Next.js + OpenStreetMap**: las páginas bajo `src/app` (monitoring, impact, ecovigia, dashboard, assistant, etc.) reutilizan componentes como `InteractiveMap`, `AIAnalysisPanel` y `ContactBubble` para mostrar capas geoespaciales, alertas y canales ciudadanos. Estas decisiones priorizan usabilidad para líderes comunitarios al ofrecer visualizaciones filtrables por localidad y evento.
+- **Servicios y API**: el chart expone un `Service` (ClusterIP) y un `Ingress` con host `myapp.local`. Las APIs `/api/*` (nodes en `src/app/api`) alimentan widgets, mientras que rutas integradas con `ollama` trazan alertas inteligentes desde datos climáticos históricos.
+- **Datos abiertos**: la base geoespacial `public/data/soacha.geojson` y los datasets del reto (AVCA, CRMC) alimentan la vista territorial, y la configuración de producción respeta buenas prácticas (configmap/secret, requests & limits, HPA).
 
-El municipio de Soacha, Cundinamarca, se encuentra en una **encrucijada crítica** donde la urbanización acelerada, alta densidad poblacional y construcción informal convergen con los impactos severos del cambio climático. Fenómenos como **inundaciones, remociones en masa y avenidas torrenciales**, exacerbados por la variabilidad climática, han creado un escenario de vulnerabilidad que amenaza la seguridad y bienestar de miles de habitantes.
+## Uso de Helm (instalación manual)
 
-### El Desafío en Números
+1. **Requisitos previos**: asegúrate de tener una instalación de Kubernetes local (Minikube), Helm 3 y `kubectl` apuntando al clúster.
+2. **Preparar el entorno**:
+	```bash
+	minikube start
+	helm repo add bitnami https://charts.bitnami.com/bitnami
+	kubectl create namespace myapp-dev
+	kubectl create namespace myapp-prod
+	```
+3. **Instalar el chart en el entorno dev**:
+	```bash
+	helm upgrade --install parcial-dev helm/myapp --namespace myapp-dev --values helm/myapp/values-dev.yaml
+	```
+4. **Instalar en prod (puede apuntar al mismo clúster para pruebas)**:
+	```bash
+	helm upgrade --install parcial-prod helm/myapp --namespace myapp-prod --values helm/myapp/values-prod.yaml
+	```
+5. **Personalizar valores**: modifica `helm/myapp/values-{dev,prod}.yaml` para cambiar la imagen, credenciales, recursos, réplicas o variables de entorno. El chart principal controla la contraseña de PostgreSQL y la configuración de la app vía ConfigMap/Secret.
 
-- 🌊 **71% de incidencia de inundaciones** en la zona
-- ⚠️ **62% no conoce protocolos de evacuación**
-- 💰 **81% sin ahorros para emergencias**
-- 🍽️ **27% sufre inseguridad alimentaria**
-- 📅 **Temporadas críticas**: Marzo-Junio, Octubre-Noviembre
-- 👥 **10,605 personas** objetivo de la Fase II del UCRP (2025-2027)
+## ArgoCD + Minikube (sincronización automática)
 
-### Proyecto de Resiliencia Climática Urbana (UCRP) - Fase II
+1. **Instala ArgoCD en Minikube** (puedes usar el manifiesto oficial):
+	```bash
+	kubectl create namespace argocd
+	kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+	```
+2. **Exponer el servidor ArgoCD**:
+	```bash
+	kubectl port-forward svc/argocd-server -n argocd 8080:443
+	```
+	Luego accede a `https://localhost:8080` y usa las credenciales por defecto. Obtén el token con:
+	```bash
+	kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 --decode
+	```
+	(el usuario es `admin`).
 
-El **UCRP**, respaldado por **Zurich Foundation** e implementado por **Cruz Roja Colombiana** en alianza con la **Universidad de La Sabana**, centra sus esfuerzos en las comunidades de **La María y El Danubio**. El objetivo: fortalecer capacidades comunitarias para reducir la vulnerabilidad ante amenazas climáticas, pasando de un **modelo reactivo a uno proactivo y basado en evidencia**.
+	*Windows PowerShell users* can decode with:
+	```powershell
+	kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | % { [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($_)) }
+	```
+3. **Aplica las aplicaciones declaradas**: las carpetas `environments/dev/application.yaml` y `environments/prod/application.yaml` describen las aplicaciones `myapp-dev` y `myapp-prod`. Puedes crearlas directamente:
+	```bash
+	kubectl apply -f environments/dev/application.yaml
+	kubectl apply -f environments/prod/application.yaml
+	```
+4. **Sincronización GitOps**: ambos manifests apuntan al repositorio `https://github.com/ch1fl1n/Parcial1_Patrones.git`, rama `main` y al chart `helm/myapp`. ArgoCD usa `syncPolicy.automated` para `prune` y `selfHeal`, por lo que cualquier cambio en `values-dev.yaml` o `values-prod.yaml` en `main` se despliega automáticamente.
+5. **Minikube networking**: ejecuta `minikube tunnel` (en terminal separado) para habilitar IPs de LoadBalancer si necesitas exponer servicios; los `Ingress` requieren mapear `myapp.local` a la IP de Minikube en tu archivo `hosts`.
 
-**Renace Soacha** es la respuesta tecnológica a este desafío, transformando datos dispersos (AVCA/CRMC) en inteligencia accionable mediante:
+## Endpoints accesibles
 
-- 🗺️ Visualización geoespacial interactiva
-- 🤖 Inteligencia Artificial para análisis predictivo
-- 📲 Alertas tempranas vía notificaciones push
-- 💬 Asistente virtual conversacional
-- 📊 Dashboard de impacto en tiempo real
+- **Frontend principal**:
+  - Host: `http://myapp.local` (o la IP de `Ingress` si usas `minikube tunnel`). Añade la entrada `$(minikube ip) myapp.local` en `/etc/hosts`.
+  - Página inicial con dashboard climático y canales de contacto.
+- **API / Backend**: todas las rutas bajo `http://myapp.local/api/*` gestionan alertas, análisis IA y notificaciones (`/api/ollama/*`, `/api/reports/export`, `/api/notifications`).
+- **Otras vistas**: las rutas en `src/app/` (impact, monitoring, ecovigia, assistant, attention-lines) están disponibles vía la misma host y se navegan como páginas Next (`/impact`, `/monitoring`, etc.).
 
----
+## Lógica de diseño
 
-## 🚀 Inicio Rápido
+- Usamos Helm para versionar y parametrizar despliegues completos: cada subchart (PostgreSQL y app) encapsula configuración reutilizable, y los `values-*.yaml` por ambiente aseguran que recursos, réplicas y variables sean independientes.
+- El HPA asegura que el frontend escale ante picos de CPU, mientras que ConfigMap/Secret separan configuración pública y sensible. Esto mantiene el cumplimiento de buenas prácticas (recursos, autoscaling, no exponer credenciales adjuntas).
+- Las páginas Next.js combinan mapas (componentes `InteractiveMap`, `AIAnalysisPanel`) con microservicios del backend (rutas en `src/app/api`). De esta forma las comunidades ven capas geográficas ricas y datos de resiliencia (AVCA/CRMC) sin saber de la infraestructura.
+- ArgoCD cierra el ciclo GitOps: solo se requiere hacer push a `main` y la plataforma, gracias al `syncPolicy.automated`, actualiza los entornos transparentemente.
 
-### Prerrequisitos
+## Posibles mejoras
 
-- Node.js 18+ instalado
-- Git instalado
-- API Key de Ollama Cloud (gratuita en [ollama.com/settings/keys](https://ollama.com/settings/keys))
+1. **Pipeline CI/CD completo**: integrar GitHub Actions o tekton que valide la build del frontend/backend antes de actualizar `values` y notifiquen a ArgoCD.
+2. **Control de acceso**: añadir OAuth/OpenID para proteger dashboards sensibles y registrar quién genera alertas o exporta reportes.
+3. **Monitoreo y alertas**: conectar Prometheus/Grafana para métricas de latencia y errores; agregar alertmanager para que ArgoCD notifique fallos en sincronización.
+4. **Escalado geográfico**: separar los datos de El Danubio y La María en múltiples namespaces/values y habilitar MultiCluster o Remote Writing para escalar a otros municipios.
 
-### Instalación
+## Notas adicionales
 
-```bash
-# 1. Clonar el repositorio
-git clone https://github.com/Kapum357/algorythm.git
-cd algorythm
+- Ajusta las credenciales de PostgreSQL (`helm/myapp/values.yaml`) y del secret `DB_PASSWORD` antes de exponer a producción.
+- Para pruebas rápidas en Minikube puedes usar `helm upgrade --install --wait` para verificar la salud de todos los recursos antes de confiar en ArgoCD.
+- ArgoCD ya está preparado para `prune` y `selfHeal`, por lo que cualquier recurso manual creado fuera de Helm será eliminado o restaurado si no figura en la plantilla del chart.
 
-# 2. Instalar dependencias
-npm install
-
-# 3. Configurar variables de entorno
-cp .env.local.example .env.local
-# Editar .env.local y agregar OLLAMA_API_KEY
-
-# 4. Generar claves VAPID para notificaciones push
-npm run generate-vapid-keys
-
-# 5. Iniciar servidor de desarrollo
-npm run dev
-
-# 6. Abrir en navegador
-# http://localhost:3000
-```
-
-### Rutas Principales
-
-- `/` - Mapa interactivo de riesgo
-- `/alerts` - Sistema de alertas tempranas
-- `/dashboard` - Panel de métricas e impacto
-- `/ecovigia` - Dashboard integrado EcoVigía
-- `/assistant` - Asistente virtual conversacional
-
----
-
-## 🎯 Definición del Reto (Cruz Roja Colombiana)
-------------------------
-
-El desafío consiste en desarrollar un prototipo funcional (web, dashboard o aplicación) que integre datos georreferenciados y visualizaciones interactivas para analizar, monitorear y comunicar información sobre la resiliencia climática urbana en Soacha. La solución debe permitir identificar las zonas de mayor vulnerabilidad, estimar la cantidad de personas afectadas por una emergencia y generar alertas preventivas basadas en datos ambientales o históricos.Líneas de desarrollo posibles:1. Mapa interactivo con capas georreferenciadas que muestre zonas de riesgo, puntos críticos y rutas seguras.2. Dashboard de impacto poblacional: herramienta que calcule cuántas personas o familias fueron afectadas por cada evento y en qué sectores.3. Sistema de predicción o alerta preventiva mediante IA o análisis estadístico de datos climáticos (precipitación, temperatura, humedad).4. Plataforma de reporte ciudadano o panel de control que permita visualizar actualizaciones de campo, fotografías o registros.
-
-**Condiciones que debe cumplir la solución:**
----------------------------------------------
-
-1\. Georreferenciación:   - Integrar mapas de acceso libre (OpenStreetMap, Leaflet, Google Maps, Mapbox, etc.) para representar información territorial.2. Datos abiertos:   - Usar datos disponibles del proyecto RCU (AVCA y CRMC) o fuentes públicas (IDEAM, OpenWeather, datos demográficos).3. Visualización e impacto:   - Permitir filtrar, visualizar y comparar información por zonas, periodos o tipo de evento.4. Inteligencia Artificial o analítica predictiva:   - Aplicar algoritmos simples para generar alertas tempranas o detectar patrones de riesgo.5. Usabilidad:   - Interfaz intuitiva para voluntarios, líderes comunitarios o instituciones sin conocimientos técnicos.6. Escalabilidad:   - Capacidad de extender el sistema a otras comunidades o municipios.
-
-**Entregable esperado:**
-------------------------
-
-\- Prototipo funcional o demo navegable (mapa interactivo, dashboard, app o sistema web).- Pitch de 5.- Descripción técnica del modelo de datos, herramientas utilizadas y posibles integraciones con sistemas institucionales.
-
----
-
-## 🤖 Integración de IA con Ollama Cloud
-
-Este proyecto ahora incluye **capacidades de Inteligencia Artificial** mediante **Ollama Cloud** para potenciar el análisis de resiliencia climática:
-
-### ✨ Nuevas Funcionalidades AI
-
-- **🔍 Análisis Automático de Vulnerabilidades** - Procesa datos CRMC/AVCA y genera insights accionables
-- **🌊 Evaluación Inteligente de Riesgo de Inundación** - Análisis contextual por ubicación
-- **🚨 Generación de Planes de Emergencia** - Recomendaciones personalizadas para incidentes
-- **📊 Predicción de Patrones de Riesgo** - Identifica períodos críticos basándose en datos históricos
-
-### 🚀 Inicio Rápido con IA
-
-1. **Configura tu API Key de Ollama**:
-
-   ```bash
-   # Crea .env y agrega:
-   OLLAMA_API_KEY=tu_api_key_aqui
-   ```
-
-   Obtén tu API key en: [ollama.com/settings/keys](https://ollama.com/settings/keys)
-
-2. **Ejecuta el proyecto**:
-
-   ```bash
-   npm install
-   npm run dev
-   ```
-
-3. **Prueba la demo interactiva**:
-   - Visita: [http://localhost:3000/ai-demo](http://localhost:3000/ai-demo)
-   - Prueba los 3 casos de uso principales de IA
-
-### 🛠️ Stack Tecnológico AI
-
-- **Ollama Cloud**: Modelos gpt-oss:120b-cloud y glm-4.6:cloud
-- **Next.js 16 API Routes**: Endpoints RESTful para servicios de IA
-- **React 19**: Interfaz interactiva y componentes reutilizables
-- **OpenStreetMap + Leaflet**: Visualización geoespacial
-
-### 🎯 Impacto
-
-La integración de IA transforma DIR-Soacha de una herramienta de visualización a una **plataforma inteligente de gestión de resiliencia** que:
-
-✅ Reduce el tiempo de análisis de vulnerabilidades de horas a minutos  
-✅ Genera recomendaciones contextualizadas basadas en datos locales  
-✅ Permite anticipar riesgos en lugar de solo reaccionar a emergencias  
-✅ Empodera a líderes comunitarios con insights accionables
-
----
-
----
-
-## 🔔 Sistema de Notificaciones Push
-
-DIR-Soacha ahora incluye un **sistema completo de notificaciones push** para enviar alertas climáticas en tiempo real a dispositivos móviles y de escritorio.
-
-### 📱 Características
-
-- ✅ **Multiplataforma**: Android, iOS, Windows, Linux, macOS
-- ✅ **Tiempo Real**: Notificaciones instantáneas incluso con navegador cerrado
-- ✅ **Niveles de Severidad**: Alta (roja), Media (amarilla), Baja (verde)
-- ✅ **Seguro**: Encriptación end-to-end con VAPID
-- ✅ **Offline-Ready**: Funciona con Service Workers
-
-### � Configuración Rápida
-
-1. **Genera las llaves VAPID**:
-
-   ```bash
-   npm run generate-vapid-keys
-   ```
-
-2. **Reinicia el servidor**:
-
-   ```bash
-   npm run dev
-   ```
-
-3. **Activa notificaciones**:
-   - Ve a <http://localhost:3000/alerts>
-   - Haz clic en "Activar Notificaciones"
-   - Acepta el permiso en tu navegador
-
-4. **Prueba el sistema**:
-   - Reporta una alerta de cualquier severidad
-   - Recibirás una notificación push instantánea
-
-### 📖 Documentación Completa
-
-- Arquitectura, API endpoints, integración con IA
-- Solución de problemas y mejores prácticas

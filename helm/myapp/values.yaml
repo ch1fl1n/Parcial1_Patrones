@@ -11,7 +11,7 @@ postgresql:
     tag: "latest"
     pullPolicy: IfNotPresent
   auth:
-    postgresPassword: "changeme"  # Change this in production
+    postgresPassword: "mypass"  # Change this in production
     username: "myuser"
     password: "mypass"  # Change this in production
     database: "parcialdb"
@@ -52,7 +52,7 @@ app:
     dbName: "parcialdb"
     dbUser: "myuser"
   secret:
-    dbPassword: "mypass"  # Should match postgresql.auth.password
+    dbPassword: "mypass"
   resources:
     requests:
       cpu: 100m
