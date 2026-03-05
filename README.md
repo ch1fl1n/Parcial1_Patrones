@@ -17,6 +17,8 @@ Renace Soacha es la plataforma que combina mapas interactivos, dashboards de imp
 2. **Preparar el entorno**:
 	```bash
 	minikube start
+	eval $(minikube docker-env)
+	docker build -t parcial:latest .
 	helm repo add bitnami https://charts.bitnami.com/bitnami
 	kubectl create namespace myapp-dev
 	kubectl create namespace myapp-prod
@@ -63,7 +65,7 @@ Renace Soacha es la plataforma que combina mapas interactivos, dashboards de imp
 ## Endpoints accesibles
 
 - **Frontend principal**:
-  - Host: ejecuta `minikube service parcial-app --url` para obtener la URL expuesta (por ejemplo `http://127.0.0.1:xxxxx`).
+  - Host: ejecuta `minikube service parcial-dev-app -n myapp-dev --url` para obtener la URL expuesta (por ejemplo `http://127.0.0.1:xxxxx`).
   - Página inicial con dashboard climático y canales de contacto.
 - **API / Backend**:
   - Accesible bajo la misma host base que el frontend, con rutas `http://<host>/api/...`.

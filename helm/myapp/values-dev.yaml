@@ -2,7 +2,7 @@
 replicaCount: 1
 
 image:
-  repository: ch1fl1n/myapp   # <- cambia por tu repo de imagen
+  repository: parcial
   tag: dev
 
 service:
