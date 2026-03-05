@@ -63,9 +63,10 @@ Renace Soacha es la plataforma que combina mapas interactivos, dashboards de imp
 ## Endpoints accesibles
 
 - **Frontend principal**:
-  - Host: `http://myapp.local` (o la IP de `Ingress` si usas `minikube tunnel`). Añade la entrada `$(minikube ip) myapp.local` en `/etc/hosts`.
+  - Host: ejecuta `minikube service parcial-app --url` para obtener la URL expuesta (por ejemplo `http://127.0.0.1:xxxxx`).
   - Página inicial con dashboard climático y canales de contacto.
-- **API / Backend**: todas las rutas bajo `http://myapp.local/api/*` gestionan alertas, análisis IA y notificaciones (`/api/ollama/*`, `/api/reports/export`, `/api/notifications`).
+- **API / Backend**:
+  - Accesible bajo la misma host base que el frontend, con rutas `http://<host>/api/...`.
 - **Otras vistas**: las rutas en `src/app/` (impact, monitoring, ecovigia, assistant, attention-lines) están disponibles vía la misma host y se navegan como páginas Next (`/impact`, `/monitoring`, etc.).
 
 ## Lógica de diseño
@@ -79,12 +80,5 @@ Renace Soacha es la plataforma que combina mapas interactivos, dashboards de imp
 
 1. **Pipeline CI/CD completo**: integrar GitHub Actions o tekton que valide la build del frontend/backend antes de actualizar `values` y notifiquen a ArgoCD.
 2. **Control de acceso**: añadir OAuth/OpenID para proteger dashboards sensibles y registrar quién genera alertas o exporta reportes.
-3. **Monitoreo y alertas**: conectar Prometheus/Grafana para métricas de latencia y errores; agregar alertmanager para que ArgoCD notifique fallos en sincronización.
+3. **Monitoreo y alertas**: Agregar alertmanager para que ArgoCD notifique fallos en sincronización.
 4. **Escalado geográfico**: separar los datos de El Danubio y La María en múltiples namespaces/values y habilitar MultiCluster o Remote Writing para escalar a otros municipios.
-
-## Notas adicionales
-
-- Ajusta las credenciales de PostgreSQL (`helm/myapp/values.yaml`) y del secret `DB_PASSWORD` antes de exponer a producción.
-- Para pruebas rápidas en Minikube puedes usar `helm upgrade --install --wait` para verificar la salud de todos los recursos antes de confiar en ArgoCD.
-- ArgoCD ya está preparado para `prune` y `selfHeal`, por lo que cualquier recurso manual creado fuera de Helm será eliminado o restaurado si no figura en la plantilla del chart.
-
