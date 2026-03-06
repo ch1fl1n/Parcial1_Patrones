@@ -1,5 +1,5 @@
 # values-dev.yaml - valores para entorno dev
-replicaCount: 1
+replicaCount: 3
 
 image:
   repository: parcial

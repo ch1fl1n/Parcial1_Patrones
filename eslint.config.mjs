@@ -17,6 +17,8 @@ export default defineConfig([
     ],
   },
   { files: ["**/*.{js,mjs,cjs,jsx}"], plugins: { js }, extends: ["js/recommended"], languageOptions: { globals: globals.browser } },
+  // Add Node.js globals for server-side files
+  { files: ["src/lib/**/*.js", "src/app/api/**/*.js"], languageOptions: { globals: { ...globals.browser, ...globals.node } } },
   // Treat .js files as ES modules (Next.js uses ESM). Previously this forced script
   // sourceType which caused parsing errors for `import`/`export` syntax.
   { files: ["**/*.js"], languageOptions: { sourceType: "module" } },
