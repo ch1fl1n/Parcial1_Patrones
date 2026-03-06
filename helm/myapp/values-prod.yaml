@@ -1,5 +1,6 @@
 # values-prod.yaml - valores para entorno prod
-replicaCount: 3
+app:
+  replicaCount: 3
 
 image:
   repository: parcial
